@@ -1,0 +1,9 @@
+node_modules/
+dist/
+
+# Personal data - not committed
+src/lib/data/
+*.sqlite
+*.db
+*.duckdb
+

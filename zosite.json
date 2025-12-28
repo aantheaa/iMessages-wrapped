@@ -1,0 +1,19 @@
+{
+  "name": "imessages-viz",
+  "local_port": 56743,
+  "entrypoint": "bun run dev",
+  "env": {
+    "VITE_ZO_SITE_DEMO_VARIANT": "data"
+  },
+  "publish": {
+    "label": "imessages-viz",
+    "type": "http",
+    "entrypoint": "bun run prod",
+    "published_port": 57924,
+    "env": {
+      "NODE_ENV": "production",
+      "ZO_CLIENT_IDENTITY_TOKEN": "none",
+      "VITE_ZO_SITE_DEMO_VARIANT": "data"
+    }
+  }
+}
