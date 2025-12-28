@@ -1,6 +1,12 @@
+#!/usr/bin/env python3
+"""
+Extract emoji usage per contact from iMessage database.
+Usage: python contact_emojis.py <path-to-data.duckdb>
+"""
 import json
 import re
 import subprocess
+import sys
 from collections import Counter
 
 EMOJI_PATTERN = re.compile(
@@ -24,16 +30,16 @@ EMOJI_PATTERN = re.compile(
     flags=re.UNICODE
 )
 
-def get_db_data(query):
+def get_db_data(db_path, query):
     result = subprocess.check_output([
-        "duckdb", "/home/workspace/imessages/data.duckdb", "-json", "-c", query
+        "duckdb", db_path, "-json", "-c", query
     ])
     return json.loads(result)
 
 def extract_emojis(text):
     return EMOJI_PATTERN.findall(text)
 
-def get_emojis_for_identifier(identifier):
+def get_emojis_for_identifier(db_path, identifier):
     query = f"""
     SELECT text FROM messages m
     JOIN handles h ON m.handle_id = h.handle_id
@@ -43,94 +49,40 @@ def get_emojis_for_identifier(identifier):
       AND m.sent_at >= '2025-01-01'
     """
     result = subprocess.check_output([
-        "duckdb", "/home/workspace/imessages/data.duckdb", "-list", "-c", query
+        "duckdb", db_path, "-list", "-c", query
     ])
     return extract_emojis(result.decode('utf-8'))
 
 def main():
+    if len(sys.argv) < 2:
+        print("Usage: python contact_emojis.py <path-to-data.duckdb>", file=sys.stderr)
+        sys.exit(1)
+    
+    db_path = sys.argv[1]
+    
+    # Get top contacts by message count
     query = """
     SELECT 
+        COALESCE(c.name, h.identifier) AS contact,
         h.identifier,
-        SUM(CASE WHEN m.is_from_me = TRUE THEN 1 ELSE 0 END) as sent,
-        SUM(CASE WHEN m.is_from_me = FALSE THEN 1 ELSE 0 END) as received,
         COUNT(*) as total
     FROM messages m
     JOIN handles h ON m.handle_id = h.handle_id
+    LEFT JOIN contacts c ON h.identifier = c.identifier
     WHERE m.sent_at >= '2025-01-01'
       AND (m.associated_message_type IS NULL OR m.associated_message_type = 0)
       AND m.room_name IS NULL
-    GROUP BY 1
+    GROUP BY 1, 2
     ORDER BY total DESC
-    LIMIT 30;
+    LIMIT 10;
     """
     
-    data = get_db_data(query)
-    
-    # Map identifiers to friendly names
-    IDENTIFIER_TO_NAME = {
-        "+12147265046": "Rob (Bubba)",
-        "+14088584780": "Jackie",
-        "+12604155053": "Bridget B",
-        "+12038106446": "Mommy 💕",
-    }
-    
-    # Skip these identifiers
-    SKIP_IDENTIFIERS = {
-        "antheartaeuber@icloud.com",
-    }
-    
-    # Must include these people (mom!)
-    MUST_INCLUDE = {"+12038106446"}
-    
-    # Get contact names from DB
-    name_query = """
-    SELECT DISTINCT h.identifier, COALESCE(c.name, h.identifier) as contact_name
-    FROM handles h
-    LEFT JOIN contacts c ON h.identifier = c.identifier
-    """
-    name_data = get_db_data(name_query)
-    db_names = {row['identifier']: row['contact_name'] for row in name_data}
-    
-    # Build contact list
-    contacts = []
-    for entry in data:
-        identifier = entry['identifier']
-        if identifier in SKIP_IDENTIFIERS:
-            continue
-        
-        name = IDENTIFIER_TO_NAME.get(identifier, db_names.get(identifier, identifier))
-        
-        contacts.append({
-            "contact": name,
-            "identifier": identifier,
-            "sent": entry["sent"],
-            "received": entry["received"],
-            "total": entry["total"]
-        })
-    
-    # Get top 5, then ensure mom is included
-    top_contacts = contacts[:5]
-    
-    # Check if mom is in top 5 already
-    mom_in_top = any(c["identifier"] in MUST_INCLUDE for c in top_contacts)
-    if not mom_in_top:
-        # Find mom and add her
-        for c in contacts:
-            if c["identifier"] in MUST_INCLUDE:
-                top_contacts.append(c)
-                break
-    
-    # Output for top-contacts.json
-    top_contacts_output = [{"contact": c["contact"], "sent": c["sent"], "received": c["received"], "total": c["total"]} 
-                           for c in top_contacts]
-    
-    with open("/home/workspace/imessages-viz/src/lib/data/top-contacts.json", "w") as f:
-        json.dump(top_contacts_output, f, indent=2)
+    contacts = get_db_data(db_path, query)
     
     # Get emojis for each top contact
     emoji_results = []
-    for contact in top_contacts:
-        emojis_list = get_emojis_for_identifier(contact["identifier"])
+    for contact in contacts:
+        emojis_list = get_emojis_for_identifier(db_path, contact["identifier"])
         counts = Counter(emojis_list)
         emojis = [{"emoji": e, "count": c} for e, c in counts.most_common(5)]
         
@@ -144,3 +96,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
