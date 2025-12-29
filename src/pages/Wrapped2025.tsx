@@ -34,6 +34,7 @@ import plans from "@/lib/data/plans.json";
 import stats from "@/lib/data/stats.json";
 import connections from "@/lib/data/connections.json";
 import personalityEvaluation from "@/lib/data/personality-evaluation.json";
+import yearlyTop5 from "@/lib/data/yearly-top5.json";
 
 const monthlyConfig = {
   count: { label: "Messages", color: "var(--chart-1)" },
@@ -66,7 +67,7 @@ const tapbackEmojis: Record<string, string> = {
 
 const formatMonth = (val: string) => monthLabels[val] || val;
 
-type ViewMode = "vibes" | "messages" | "personality";
+type ViewMode = "vibes" | "messages" | "personality" | "history";
 
 interface CardInfo {
   id: string;
@@ -178,6 +179,16 @@ export default function Wrapped2025() {
               }`}
             >
               🔮 Personality
+            </button>
+            <button
+              onClick={() => setViewMode("history")}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                viewMode === "history" 
+                  ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md" 
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              📜 History
             </button>
           </div>
           <ShareModal cards={allCards} />
@@ -803,6 +814,76 @@ export default function Wrapped2025() {
           </ExportableCard>
         )}
 
+        {/* ===================== HISTORY VIEW ===================== */}
+        {viewMode === "history" && (
+          <>
+            {/* Besties Through The Years */}
+            <Card>
+              <CardHeader>
+                <CardTitle>📜 Your Besties Through The Years</CardTitle>
+                <CardDescription>Top 5 people you texted most, year by year (2021-2025)</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col gap-8">
+                  {[2021, 2022, 2023, 2024, 2025].map(year => {
+                    const yearData = yearlyTop5.filter((d: any) => d.year === year);
+                    if (yearData.length === 0) return null;
+                    return (
+                      <div key={year} className="space-y-3">
+                        <h3 className="text-xl font-bold text-center bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
+                          {year}
+                        </h3>
+                        <div className="flex flex-col gap-2">
+                          {yearData.map((person: any, i: number) => {
+                            const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : "";
+                            const bgColor = i === 0 ? "bg-amber-500/10 border-amber-500/30" 
+                                          : i === 1 ? "bg-slate-400/10 border-slate-400/30" 
+                                          : i === 2 ? "bg-orange-700/10 border-orange-700/30" 
+                                          : "bg-muted/50 border-muted";
+                            return (
+                              <div key={i} className={`flex items-center justify-between p-3 rounded-lg border ${bgColor}`}>
+                                <div className="flex items-center gap-3">
+                                  <span className="text-2xl w-8">{medal || `#${i + 1}`}</span>
+                                  <span className="font-medium">{person.contact}</span>
+                                </div>
+                                <span className="text-sm text-muted-foreground">{person.msg_count.toLocaleString()} msgs</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Fun Facts */}
+            <Card>
+              <CardHeader>
+                <CardTitle>🌟 History Highlights</CardTitle>
+                <CardDescription>Patterns across the years</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col gap-4">
+                  <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                    <p className="text-sm"><span className="font-bold">The Constant:</span> Melanie has been in your Top 5 for 4 out of 5 years</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-pink-500/10 border border-pink-500/20">
+                    <p className="text-sm"><span className="font-bold">The Rise:</span> Rob went from not in your top 5 to #1 in 2024-2025</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                    <p className="text-sm"><span className="font-bold">Mom's Steady Presence:</span> Your mom has been in your Top 5 for 3 years straight</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                    <p className="text-sm"><span className="font-bold">Cloe Era:</span> Cloe entered your Top 5 in 2022 and stayed every year since</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        )}
+
         {/* Footer - Always visible */}
         <footer className="text-center py-12 opacity-50 italic">
           <p>Made with 🩵 and care by Zoda.</p>
@@ -811,6 +892,9 @@ export default function Wrapped2025() {
     </div>
   );
 }
+
+
+
 
 
 
