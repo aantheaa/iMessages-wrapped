@@ -6,7 +6,8 @@ import EventDemo from "./pages/demos/event-demo";
 import SlidesDemo from "./pages/demos/slides-demo";
 import DataDemo from "./pages/demos/data-demo";
 import MarketingDemo from "./pages/demos/marketing-demo";
-import Wrapped2025 from "./pages/Wrapped2025";
+import Wrapped2025 from "@/pages/Wrapped2025";
+import YearlyTop5 from "@/pages/YearlyTop5";
 import { ThemeProvider } from "@/components/theme-provider";
 
 /**
@@ -38,6 +39,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<DemoComponent />} />
+          <Route path="/yearly-top5" element={<YearlyTop5 />} />
           <Route path="/demos/blank" element={<BlankDemo />} />
           <Route path="/demos/blog" element={<BlogDemo />} />
           <Route path="/demos/event" element={<EventDemo />} />
@@ -49,4 +51,5 @@ export default function App() {
     </ThemeProvider>
   );
 }
+
 
