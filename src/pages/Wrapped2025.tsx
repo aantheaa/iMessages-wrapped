@@ -830,9 +830,11 @@ export default function Wrapped2025() {
                     if (yearData.length === 0) return null;
                     return (
                       <div key={year} className="space-y-3">
-                        <h3 className="text-xl font-bold text-center bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
-                          {year}
-                        </h3>
+                        <div className="flex items-center justify-center gap-3 py-3 mb-2 rounded-lg bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30">
+                          <span className="text-3xl font-bold bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
+                            {year}
+                          </span>
+                        </div>
                         <div className="flex flex-col gap-2">
                           {yearData.map((person: any, i: number) => {
                             const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : "";
@@ -892,6 +894,7 @@ export default function Wrapped2025() {
     </div>
   );
 }
+
 
 
 
