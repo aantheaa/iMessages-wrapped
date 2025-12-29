@@ -817,68 +817,77 @@ export default function Wrapped2025() {
         {/* ===================== HISTORY VIEW ===================== */}
         {viewMode === "history" && (
           <>
-            {/* Besties Through The Years */}
+            {/* Besties Through The Years - Table Format */}
             <Card>
               <CardHeader>
                 <CardTitle>📜 Your Besties Through The Years</CardTitle>
-                <CardDescription>Top 5 people you texted most, year by year (2021-2025)</CardDescription>
+                <CardDescription>Top 5 people you texted most, year by year</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="flex flex-col gap-8">
-                  {[2021, 2022, 2023, 2024, 2025].map(year => {
-                    const yearData = yearlyTop5.filter((d: any) => d.year === year);
-                    if (yearData.length === 0) return null;
-                    return (
-                      <div key={year} className="space-y-3">
-                        <div className="flex items-center justify-center gap-3 py-4 mb-2 rounded-lg bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-indigo-500/20 border border-purple-500/30">
-                          <span className="text-3xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
-                            {year}
-                          </span>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                          {yearData.map((person: any, i: number) => {
-                            const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : "";
-                            const bgColor = i === 0 ? "bg-amber-500/10 border-amber-500/30" 
-                                          : i === 1 ? "bg-slate-400/10 border-slate-400/30" 
-                                          : i === 2 ? "bg-orange-700/10 border-orange-700/30" 
-                                          : "bg-muted/50 border-muted";
-                            return (
-                              <div key={i} className={`flex items-center justify-between p-3 rounded-lg border ${bgColor}`}>
-                                <div className="flex items-center gap-3">
-                                  <span className="text-2xl w-8">{medal || `#${i + 1}`}</span>
-                                  <span className="font-medium">{person.contact}</span>
-                                </div>
-                                <span className="text-sm text-muted-foreground">{person.msg_count.toLocaleString()} msgs</span>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    );
-                  })}
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-muted">
+                        <th className="text-left py-3 px-2 text-xs font-semibold text-muted-foreground w-12">Rank</th>
+                        {[2021, 2022, 2023, 2024, 2025].map(year => (
+                          <th key={year} className="text-center py-3 px-2">
+                            <span className="text-lg font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
+                              {year}
+                            </span>
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[0, 1, 2, 3, 4].map(rank => {
+                        const medal = rank === 0 ? "🥇" : rank === 1 ? "🥈" : rank === 2 ? "🥉" : `#${rank + 1}`;
+                        const rowBg = rank === 0 ? "bg-amber-500/5" : rank === 1 ? "bg-slate-400/5" : rank === 2 ? "bg-orange-700/5" : "";
+                        return (
+                          <tr key={rank} className={`border-b border-muted/50 ${rowBg}`}>
+                            <td className="py-3 px-2 text-center text-xl">{medal}</td>
+                            {[2021, 2022, 2023, 2024, 2025].map(year => {
+                              const person = yearlyTop5.find((d: any) => d.year === year && d.rank === rank + 1);
+                              return (
+                                <td key={year} className="py-3 px-2 text-center">
+                                  {person ? (
+                                    <div className="flex flex-col items-center">
+                                      <span className="font-medium text-sm">{person.contact}</span>
+                                      <span className="text-xs text-muted-foreground">{person.msg_count.toLocaleString()}</span>
+                                    </div>
+                                  ) : (
+                                    <span className="text-muted-foreground">—</span>
+                                  )}
+                                </td>
+                              );
+                            })}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Fun Facts */}
+            {/* History Highlights */}
             <Card>
               <CardHeader>
                 <CardTitle>🌟 History Highlights</CardTitle>
-                <CardDescription>Patterns across the years</CardDescription>
+                <CardDescription>The stories your messages tell</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-col gap-4">
-                  <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/20">
-                    <p className="text-sm"><span className="font-bold">The Constant:</span> Melanie has been in your Top 5 for 4 out of 5 years</p>
+                  <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                    <p className="text-sm"><span className="font-bold">The Gabi Era (2021-2023):</span> Your #1 for three consecutive years</p>
                   </div>
                   <div className="p-4 rounded-lg bg-pink-500/10 border border-pink-500/20">
-                    <p className="text-sm"><span className="font-bold">The Rise:</span> Rob went from not in your top 5 to #1 in 2024-2025</p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/20">
-                    <p className="text-sm"><span className="font-bold">Mom's Steady Presence:</span> Your mom has been in your Top 5 for 3 years straight</p>
+                    <p className="text-sm"><span className="font-bold">Rob's Rise:</span> Entered at #4 in 2022 → took the crown in 2024 → absolutely dominated 2025 with 7,158 messages</p>
                   </div>
                   <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
-                    <p className="text-sm"><span className="font-bold">Cloe Era:</span> Cloe entered your Top 5 in 2022 and stayed every year since</p>
+                    <p className="text-sm"><span className="font-bold">Jackie's Arrival:</span> Burst onto the scene in 2024 at #2 and stayed there</p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                    <p className="text-sm"><span className="font-bold">The Constants:</span> Melanie (4/5 years), Cloe (every year since 2022), Mom (3 years)</p>
                   </div>
                 </div>
               </CardContent>
@@ -894,6 +903,7 @@ export default function Wrapped2025() {
     </div>
   );
 }
+
 
 
 
