@@ -35,6 +35,7 @@ import stats from "@/lib/data/stats.json";
 import connections from "@/lib/data/connections.json";
 import personalityEvaluation from "@/lib/data/personality-evaluation.json";
 import yearlyTop5 from "@/lib/data/yearly-top5.json";
+import growthAnalysis from "@/lib/data/growth-analysis.json";
 
 const monthlyConfig = {
   count: { label: "Messages", color: "var(--chart-1)" },
@@ -67,7 +68,7 @@ const tapbackEmojis: Record<string, string> = {
 
 const formatMonth = (val: string) => monthLabels[val] || val;
 
-type ViewMode = "vibes" | "messages" | "personality" | "history";
+type ViewMode = "vibes" | "messages" | "personality" | "history" | "growth";
 
 interface CardInfo {
   id: string;
@@ -189,6 +190,16 @@ export default function Wrapped2025() {
               }`}
             >
               📜 History
+            </button>
+            <button
+              onClick={() => setViewMode("growth")}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                viewMode === "growth" 
+                  ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md" 
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              🌱 Growth
             </button>
           </div>
           <ShareModal cards={allCards} />
@@ -895,6 +906,82 @@ export default function Wrapped2025() {
           </>
         )}
 
+        {/* ===================== GROWTH VIEW ===================== */}
+        {viewMode === "growth" && (
+          <>
+            {/* Summary */}
+            <Card className="border-emerald-500/30">
+              <CardHeader>
+                <CardTitle>🌱 Your Growth Journey</CardTitle>
+                <CardDescription>How your communication style evolved from 2021-2022 to 2024-2025</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="p-4 rounded-lg bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/20">
+                  <div className="flex flex-col gap-2">
+                    <p className="text-xs text-muted-foreground">{growthAnalysis.summary.then}</p>
+                    <p className="text-2xl text-center">↓</p>
+                    <p className="text-xs text-muted-foreground">{growthAnalysis.summary.now}</p>
+                  </div>
+                  <p className="text-sm font-medium text-center mt-4 text-emerald-400">"{growthAnalysis.summary.essence}"</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Improvements */}
+            <Card>
+              <CardHeader>
+                <CardTitle>✨ How You've Grown</CardTitle>
+                <CardDescription>Six beautiful evolutions in your communication</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col gap-6">
+                  {growthAnalysis.improvements.map((item, i) => (
+                    <div key={i} className="p-4 rounded-lg bg-muted/30 border border-muted">
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-2xl">{item.emoji}</span>
+                        <h3 className="font-bold">{item.title}</h3>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                        <div className="p-3 rounded-lg bg-red-500/5 border border-red-500/20">
+                          <p className="text-xs font-semibold text-red-400 mb-1">Before</p>
+                          <p className="text-xs text-muted-foreground">{item.before}</p>
+                        </div>
+                        <div className="p-3 rounded-lg bg-green-500/5 border border-green-500/20">
+                          <p className="text-xs font-semibold text-green-400 mb-1">After</p>
+                          <p className="text-xs text-muted-foreground">{item.after}</p>
+                        </div>
+                      </div>
+                      <p className="text-xs text-emerald-400 italic">💬 {item.insight}</p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Still Growing */}
+            <Card>
+              <CardHeader>
+                <CardTitle>🌿 Still Blooming</CardTitle>
+                <CardDescription>Areas with room to grow (and that's okay!)</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col gap-4">
+                  {growthAnalysis.stillGrowing.map((item, i) => (
+                    <div key={i} className="p-4 rounded-lg bg-amber-500/5 border border-amber-500/20">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xl">{item.emoji}</span>
+                        <h3 className="font-semibold text-sm">{item.title}</h3>
+                      </div>
+                      <p className="text-xs text-muted-foreground mb-2">{item.observation}</p>
+                      <p className="text-xs text-amber-400">🌟 Opportunity: {item.opportunity}</p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        )}
+
         {/* Footer - Always visible */}
         <footer className="text-center py-12 opacity-50 italic">
           <p>Made with 🩵 and care by Zoda.</p>
@@ -903,6 +990,10 @@ export default function Wrapped2025() {
     </div>
   );
 }
+
+
+
+
 
 
 
