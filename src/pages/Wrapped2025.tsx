@@ -830,8 +830,8 @@ export default function Wrapped2025() {
                     if (yearData.length === 0) return null;
                     return (
                       <div key={year} className="space-y-3">
-                        <div className="flex items-center justify-center gap-3 py-3 mb-2 rounded-lg bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30">
-                          <span className="text-3xl font-bold bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
+                        <div className="flex items-center justify-center gap-3 py-4 mb-2 rounded-lg bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-indigo-500/20 border border-purple-500/30">
+                          <span className="text-3xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
                             {year}
                           </span>
                         </div>
@@ -894,6 +894,7 @@ export default function Wrapped2025() {
     </div>
   );
 }
+
 
 
 
