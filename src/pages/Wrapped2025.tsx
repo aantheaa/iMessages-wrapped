@@ -979,6 +979,20 @@ export default function Wrapped2025() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Growth Summary */}
+            <Card className="border-emerald-500/30">
+              <CardContent className="pt-6">
+                <div className="text-center space-y-4">
+                  <p className="text-sm leading-relaxed">
+                    You've moved from someone who facilitated healing for others to someone who embodies the healing they teach. The authenticity comes through in a quieter, more powerful way now. 🌸
+                  </p>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    Still to explore: receiving as gracefully as you give, trusting your instincts without needing consensus, and being as gentle with your body as you are with everyone else's hearts. 🩵
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           </>
         )}
 
@@ -990,6 +1004,7 @@ export default function Wrapped2025() {
     </div>
   );
 }
+
 
 
 
