@@ -7,11 +7,12 @@ const STORY_WIDTH = 1080;
 const STORY_HEIGHT = 1920;
 
 async function captureElement(element: HTMLElement): Promise<string> {
+  console.log("[story-export] Capturing element", element.innerHTML.slice(0, 200));
   const canvas = await html2canvas(element, {
     scale: 2,
     backgroundColor: "#0a0a0f",
     useCORS: true,
-    logging: false,
+    logging: true,
     allowTaint: true,
     width: STORY_WIDTH,
     height: STORY_HEIGHT,
@@ -22,7 +23,10 @@ async function captureElement(element: HTMLElement): Promise<string> {
     scrollX: 0,
     scrollY: 0,
   });
-  return canvas.toDataURL("image/png");
+  console.log("[story-export] Canvas created", canvas.width, canvas.height);
+  const dataUrl = canvas.toDataURL("image/png");
+  console.log("[story-export] DataURL length", dataUrl.length);
+  return dataUrl;
 }
 
 function downloadDataUrl(dataUrl: string, filename: string) {
@@ -652,5 +656,6 @@ export function ShareModal({ cards }: ShareModalProps) {
     </>
   );
 }
+
 
 

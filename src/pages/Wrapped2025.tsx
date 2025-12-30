@@ -19,6 +19,8 @@ import {
   StoryPersonality,
   StoryContactEmojis,
   StoryEmojiLanguages,
+  StoryBestiesThroughYears,
+  StoryHistoryHighlights,
 } from "@/components/story-cards";
 
 import monthlyVolume from "@/lib/data/monthly-volume.json";
@@ -120,7 +122,17 @@ export default function Wrapped2025() {
     { id: "messages-dislike", title: "Messages You Disliked", category: "messages" as const, storyContent: <StoryReactionMemories title="Messages You Disliked" emoji="👎" memories={reactionMemories.dislike} /> },
     // Personality cards
     { id: "personality", title: "Personality Evaluation", category: "personality" as const, storyContent: <StoryPersonality evaluation={personalityEvaluation} /> },
+    // History cards
+    { id: "besties-through-years", title: "Besties Through The Years", category: "vibes" as const, storyContent: <StoryBestiesThroughYears data={yearlyTop5} /> },
+    { id: "history-highlights", title: "History Highlights", category: "vibes" as const, storyContent: <StoryHistoryHighlights highlights={[
+      { emoji: "💜", title: "The Gabi Era (2021-2023)", text: "Your #1 for three consecutive years", color: "rgba(168,85,247,0.1)" },
+      { emoji: "💕", title: "Rob's Rise", text: "Entered at #4 in 2022 → took the crown in 2024 → dominated 2025 with 7,158 messages", color: "rgba(236,72,153,0.1)" },
+      { emoji: "✨", title: "Jackie's Arrival", text: "Burst onto the scene in 2024 at #2 and stayed there", color: "rgba(59,130,246,0.1)" },
+      { emoji: "🌟", title: "The Constants", text: "Melanie (4/5 years), Cloe (every year since 2022), Mom (3 years)", color: "rgba(245,158,11,0.1)" },
+    ]} /> },
   ];
+
+  const historyShareCards = allCards.filter((card) => card.id === "besties-through-years" || card.id === "history-highlights");
 
   return (
     <div ref={containerRef} className="min-h-screen bg-background p-4 sm:p-6 lg:p-8 overflow-y-auto">
@@ -738,9 +750,9 @@ export default function Wrapped2025() {
                   <div className="grid grid-cols-1 gap-2">
                     {Object.entries(personalityEvaluation.ocean).map(([trait, data]) => (
                       <div key={trait} className="flex items-start gap-2 text-xs">
-                        <span className="font-medium capitalize min-w-[110px]">{trait}:</span>
+                        <span className="text-green-500 font-medium min-w-[110px]">✓ {data.level}</span>
                         <span className="text-muted-foreground">
-                          <span className="font-semibold text-foreground">{data.level}</span> — {data.evidence}
+                          <span className="font-semibold text-foreground">{data.evidence}</span>
                         </span>
                       </div>
                     ))}
@@ -840,11 +852,21 @@ export default function Wrapped2025() {
         {/* ===================== HISTORY VIEW ===================== */}
         {viewMode === "history" && (
           <>
-            {/* Besties Through The Years - Table Format */}
+            {/* BestiesThrough The Years - Table Format */}
+            <ExportableCard
+              cardId="besties-through-years"
+              title="BestiesThrough The Years"
+              storyContent={<StoryBestiesThroughYears data={yearlyTop5} />}
+            >
             <Card>
-              <CardHeader>
-                <CardTitle>📜 Your Besties Through The Years</CardTitle>
-                <CardDescription>Top 5 people you texted most, year by year</CardDescription>
+              <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                <div>
+                  <CardTitle>📜 Your Besties Through The Years</CardTitle>
+                  <CardDescription>Top 5 people you texted most, year by year</CardDescription>
+                </div>
+                <div className="ml-auto">
+                  <ShareModal cards={allCards.filter((card) => card.id === "besties-through-years")} />
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="overflow-x-auto">
@@ -891,12 +913,28 @@ export default function Wrapped2025() {
                 </div>
               </CardContent>
             </Card>
+            </ExportableCard>
 
             {/* History Highlights */}
+            <ExportableCard
+              cardId="history-highlights"
+              title="History Highlights"
+              storyContent={<StoryHistoryHighlights highlights={[
+                { emoji: "💜", title: "The Gabi Era (2021-2023)", text: "Your #1 for three consecutive years", color: "rgba(168,85,247,0.1)" },
+                { emoji: "💕", title: "Rob's Rise", text: "Entered at #4 in 2022 → took the crown in 2024 → dominated 2025 with 7,158 messages", color: "rgba(236,72,153,0.1)" },
+                { emoji: "✨", title: "Jackie's Arrival", text: "Burst onto the scene in 2024 at #2 and stayed there", color: "rgba(59,130,246,0.1)" },
+                { emoji: "🌟", title: "The Constants", text: "Melanie (4/5 years), Cloe (every year since 2022), Mom (3 years)", color: "rgba(245,158,11,0.1)" },
+              ]} />}
+            >
             <Card>
-              <CardHeader>
-                <CardTitle>🌟 History Highlights</CardTitle>
-                <CardDescription>The stories your messages tell</CardDescription>
+              <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                <div>
+                  <CardTitle>🌟 History Highlights</CardTitle>
+                  <CardDescription>The stories your messages tell</CardDescription>
+                </div>
+                <div className="ml-auto">
+                  <ShareModal cards={allCards.filter((card) => card.id === "history-highlights")} />
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-col gap-4">
@@ -915,6 +953,7 @@ export default function Wrapped2025() {
                 </div>
               </CardContent>
             </Card>
+            </ExportableCard>
           </>
         )}
 
@@ -1130,6 +1169,11 @@ export default function Wrapped2025() {
     </div>
   );
 }
+
+
+
+
+
 
 
 

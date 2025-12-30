@@ -868,8 +868,149 @@ export function StoryPersonality({
   );
 }
 
+// ============= HISTORY CARDS =============
 
+interface YearlyTop5Entry {
+  year: number;
+  contact: string;
+  msg_count: number;
+  rank: number;
+}
 
+export function StoryBestiesThroughYears({ data }: { data: YearlyTop5Entry[] }) {
+  const years = [2021, 2022, 2023, 2024, 2025];
+  
+  return (
+    <StoryFrame category="history">
+      <div style={{ display: "flex", flexDirection: "column", gap: 30, width: "100%" }}>
+        <div style={{ textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 48, marginBottom: 10 }}>📜</div>
+          <div style={{ fontSize: 42, fontWeight: 700, color: "white", marginBottom: 8 }}>
+            Besties Through The Years
+          </div>
+          <div style={{ fontSize: 22, color: "rgba(255,255,255,0.6)" }}>
+            Your top 5 texted, year by year
+          </div>
+        </div>
+        
+        {/* Table */}
+        <div style={{ width: "100%" }}>
+          {/* Header */}
+          <div style={{ 
+            display: "grid", 
+            gridTemplateColumns: "60px repeat(5, 1fr)",
+            gap: 8,
+            marginBottom: 16,
+            paddingBottom: 12,
+            borderBottom: "1px solid rgba(255,255,255,0.1)"
+          }}>
+            <div style={{ fontSize: 14, color: "rgba(255,255,255,0.4)" }}>#</div>
+            {years.map(year => (
+              <div key={year} style={{ 
+                fontSize: 20, 
+                fontWeight: 700, 
+                textAlign: "center",
+                background: "linear-gradient(135deg, #ec4899, #8b5cf6, #6366f1)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}>
+                {year}
+              </div>
+            ))}
+          </div>
+          
+          {/* Rows */}
+          {[1, 2, 3, 4, 5].map(rank => {
+            const medal = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : `#${rank}`;
+            const rowBg = rank === 1 ? "rgba(245, 158, 11, 0.1)" 
+                        : rank === 2 ? "rgba(148, 163, 184, 0.1)" 
+                        : rank === 3 ? "rgba(194, 65, 12, 0.1)" 
+                        : "transparent";
+            return (
+              <div key={rank} style={{ 
+                display: "grid", 
+                gridTemplateColumns: "60px repeat(5, 1fr)",
+                gap: 8,
+                padding: "12px 0",
+                background: rowBg,
+                borderRadius: 8,
+                marginBottom: 4,
+              }}>
+                <div style={{ fontSize: 24, textAlign: "center" }}>{medal}</div>
+                {years.map(year => {
+                  const person = data.find(d => d.year === year && d.rank === rank);
+                  return (
+                    <div key={year} style={{ textAlign: "center" }}>
+                      {person ? (
+                        <>
+                          <div style={{ fontSize: 16, fontWeight: 500, color: "white" }}>
+                            {truncate(person.contact, 10)}
+                          </div>
+                          <div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}>
+                            {person.msg_count.toLocaleString()}
+                          </div>
+                        </>
+                      ) : (
+                        <div style={{ color: "rgba(255,255,255,0.3)" }}>—</div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </StoryFrame>
+  );
+}
+
+interface HistoryHighlight {
+  emoji: string;
+  title: string;
+  text: string;
+  color: string;
+}
+
+export function StoryHistoryHighlights({ highlights }: { highlights: HistoryHighlight[] }) {
+  return (
+    <StoryFrame category="history">
+      <div style={{ display: "flex", flexDirection: "column", gap: 30, width: "100%" }}>
+        <div style={{ textAlign: "center", marginBottom: 10 }}>
+          <div style={{ fontSize: 48, marginBottom: 10 }}>🌟</div>
+          <div style={{ fontSize: 42, fontWeight: 700, color: "white", marginBottom: 8 }}>
+            History Highlights
+          </div>
+          <div style={{ fontSize: 22, color: "rgba(255,255,255,0.6)" }}>
+            The stories your messages tell
+          </div>
+        </div>
+        
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          {highlights.map((h, i) => (
+            <div
+              key={i}
+              style={{
+                background: h.color,
+                borderRadius: 16,
+                padding: 24,
+                border: "1px solid rgba(255,255,255,0.1)",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
+                <span style={{ fontSize: 28 }}>{h.emoji}</span>
+                <span style={{ fontSize: 22, fontWeight: 600, color: "white" }}>{h.title}</span>
+              </div>
+              <div style={{ fontSize: 18, color: "rgba(255,255,255,0.8)", lineHeight: 1.5 }}>
+                {h.text}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </StoryFrame>
+  );
+}
 
 
 
