@@ -37,6 +37,7 @@ import personalityEvaluation from "@/lib/data/personality-evaluation.json";
 import yearlyTop5 from "@/lib/data/yearly-top5.json";
 import growthAnalysis from "@/lib/data/growth-analysis.json";
 import thankYouNotes from "@/lib/data/thank-you-notes.json";
+import mindBodyHeart from "@/lib/data/mind-body-heart.json";
 
 const monthlyConfig = {
   count: { label: "Messages", color: "var(--chart-1)" },
@@ -1051,6 +1052,65 @@ export default function Wrapped2025() {
               </Card>
             ))}
 
+            {/* Mind Body Heart Check-Ins with Gabi */}
+            <Card className="border-purple-500/30">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <span className="text-2xl">💜</span>
+                  <span>{mindBodyHeart.title}</span>
+                </CardTitle>
+                <CardDescription>{mindBodyHeart.subtitle}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-6">{mindBodyHeart.description}</p>
+                
+                <div className="space-y-4">
+                  {mindBodyHeart.checkins.filter(c => c.mind || c.body || c.heart).map((checkin, i) => (
+                    <div key={i} className="p-4 rounded-lg bg-purple-500/5 border border-purple-500/20">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-semibold text-purple-400">{checkin.from}</span>
+                        <span className="text-xs text-muted-foreground">{checkin.date}</span>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2">
+                        {checkin.mind && (
+                          <div className="text-center">
+                            <p className="text-xs font-semibold text-blue-400">Mind</p>
+                            <p className="text-sm">{checkin.mind}</p>
+                          </div>
+                        )}
+                        {checkin.body && (
+                          <div className="text-center">
+                            <p className="text-xs font-semibold text-green-400">Body</p>
+                            <p className="text-sm">{checkin.body}</p>
+                          </div>
+                        )}
+                        {checkin.heart && (
+                          <div className="text-center">
+                            <p className="text-xs font-semibold text-pink-400">Heart</p>
+                            <p className="text-sm">{checkin.heart}</p>
+                          </div>
+                        )}
+                      </div>
+                      {checkin.note && (
+                        <p className="text-xs text-muted-foreground mt-2 italic">"{checkin.note}"</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Gabi's Wisdom */}
+                <div className="mt-6 p-4 rounded-lg bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20">
+                  <p className="text-sm italic text-center">"{mindBodyHeart.gabiWisdom}"</p>
+                  <p className="text-xs text-center text-muted-foreground mt-2">— Gabi 💜</p>
+                </div>
+
+                {/* Evolution */}
+                <div className="mt-4 p-3 rounded-lg bg-muted/50">
+                  <p className="text-xs text-center text-muted-foreground">✨ {mindBodyHeart.evolution}</p>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Closing */}
             <Card className="border-rose-500/30">
               <CardContent className="pt-6">
@@ -1070,6 +1130,8 @@ export default function Wrapped2025() {
     </div>
   );
 }
+
+
 
 
 
