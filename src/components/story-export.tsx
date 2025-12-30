@@ -95,12 +95,22 @@ interface PreviewModalProps {
 }
 
 function PreviewModal({ isOpen, onClose, imageUrl, title, isLoading }: PreviewModalProps) {
+  const [downloaded, setDownloaded] = useState(false);
+  
+  // Reset downloaded state when modal opens with new content
+  React.useEffect(() => {
+    if (isOpen) {
+      setDownloaded(false);
+    }
+  }, [isOpen, title]);
+
   if (!isOpen) return null;
 
   const handleDownload = () => {
     if (imageUrl) {
       const safeName = title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
       downloadDataUrl(imageUrl, `wrapped-${safeName}.png`);
+      setDownloaded(true);
     }
   };
 
@@ -202,10 +212,23 @@ function PreviewModal({ isOpen, onClose, imageUrl, title, isLoading }: PreviewMo
             onClick={handleDownload}
             disabled={!imageUrl || isLoading}
             className="w-full"
-            style={{ gap: "8px" }}
+            style={{ 
+              gap: "8px",
+              background: downloaded ? "linear-gradient(135deg, #22c55e, #16a34a)" : undefined,
+              borderColor: downloaded ? "#22c55e" : undefined,
+            }}
           >
-            <Download size={18} />
-            Download for Instagram
+            {downloaded ? (
+              <>
+                <span style={{ fontSize: "18px" }}>✓</span>
+                Downloaded!
+              </>
+            ) : (
+              <>
+                <Download size={18} />
+                Download for Instagram
+              </>
+            )}
           </Button>
           <p style={{ 
             fontSize: "12px", 
@@ -703,6 +726,8 @@ export function ShareModal({ cards }: ShareModalProps) {
     </>
   );
 }
+
+
 
 
 
