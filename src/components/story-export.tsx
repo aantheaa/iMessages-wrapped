@@ -30,13 +30,60 @@ async function captureElement(element: HTMLElement): Promise<string> {
 }
 
 function downloadDataUrl(dataUrl: string, filename: string) {
-  const a = document.createElement("a");
-  a.href = dataUrl;
-  a.download = filename;
-  a.style.display = "none";
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(() => document.body.removeChild(a), 100);
+  // Convert data URL to Blob for more reliable downloads (especially in iframes)
+  try {
+    const byteString = atob(dataUrl.split(',')[1]);
+    const mimeString = dataUrl.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([ab], { type: mimeString });
+    const blobUrl = URL.createObjectURL(blob);
+    
+    const a = document.createElement("a");
+    a.href = blobUrl;
+    a.download = filename;
+    a.style.display = "none";
+    
+    // For iframe contexts, we need to add to document and use a real click
+    document.body.appendChild(a);
+    
+    // Use a slight delay and manual click event
+    setTimeout(() => {
+      const clickEvent = new MouseEvent('click', {
+        view: window,
+        bubbles: true,
+        cancelable: true
+      });
+      a.dispatchEvent(clickEvent);
+      
+      // Cleanup after a delay
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
+      }, 200);
+    }, 100);
+  } catch (err) {
+    console.error("Download failed, opening in new tab:", err);
+    // Fallback: open in new tab so user can right-click save
+    const newTab = window.open();
+    if (newTab) {
+      newTab.document.write(`
+        <html>
+          <head><title>${filename}</title></head>
+          <body style="margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#111;">
+            <div style="text-align:center;">
+              <p style="color:white;margin-bottom:16px;">Right-click the image and select "Save Image As..."</p>
+              <img src="${dataUrl}" style="max-width:100%;max-height:90vh;" />
+            </div>
+          </body>
+        </html>
+      `);
+      newTab.document.close();
+    }
+  }
 }
 
 interface PreviewModalProps {
@@ -656,6 +703,7 @@ export function ShareModal({ cards }: ShareModalProps) {
     </>
   );
 }
+
 
 
 
