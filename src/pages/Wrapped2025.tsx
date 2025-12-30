@@ -36,6 +36,7 @@ import connections from "@/lib/data/connections.json";
 import personalityEvaluation from "@/lib/data/personality-evaluation.json";
 import yearlyTop5 from "@/lib/data/yearly-top5.json";
 import growthAnalysis from "@/lib/data/growth-analysis.json";
+import thankYouNotes from "@/lib/data/thank-you-notes.json";
 
 const monthlyConfig = {
   count: { label: "Messages", color: "var(--chart-1)" },
@@ -68,7 +69,7 @@ const tapbackEmojis: Record<string, string> = {
 
 const formatMonth = (val: string) => monthLabels[val] || val;
 
-type ViewMode = "vibes" | "messages" | "personality" | "history" | "growth";
+type ViewMode = "vibes" | "messages" | "personality" | "history" | "growth" | "thankyou";
 
 interface CardInfo {
   id: string;
@@ -200,6 +201,16 @@ export default function Wrapped2025() {
               }`}
             >
               🌱 Growth
+            </button>
+            <button
+              onClick={() => setViewMode("thankyou")}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                viewMode === "thankyou" 
+                  ? "bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-md" 
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              💌 Thank You
             </button>
           </div>
           <ShareModal cards={allCards} />
@@ -996,6 +1007,61 @@ export default function Wrapped2025() {
           </>
         )}
 
+        {/* ===================== THANK YOU VIEW ===================== */}
+        {viewMode === "thankyou" && (
+          <>
+            {/* Intro */}
+            <Card className="border-rose-500/30">
+              <CardContent className="pt-6">
+                <div className="text-center space-y-2">
+                  <p className="text-3xl">💌</p>
+                  <p className="text-lg font-medium">{thankYouNotes.intro}</p>
+                  <p className="text-sm text-muted-foreground">{thankYouNotes.subtitle}</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Individual Thank You Notes */}
+            {thankYouNotes.notes.map((note, i) => (
+              <Card key={i} className="border-l-4" style={{ borderLeftColor: note.color }}>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <span className="text-2xl">{note.emoji}</span>
+                    <span>To {note.name}</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="prose prose-sm dark:prose-invert max-w-none">
+                    <p className="text-sm font-medium mb-4">{note.greeting}</p>
+                    <p className="text-sm text-muted-foreground mb-4">{note.opening}</p>
+                    <div className="space-y-3">
+                      {note.thankYouFor.map((item, j) => (
+                        <div key={j} className="p-3 rounded-lg bg-muted/30">
+                          <p className="text-sm"><span className="font-semibold">{item.title}</span> — {item.detail}</p>
+                          {item.quote && (
+                            <p className="text-xs text-muted-foreground mt-2 italic border-l-2 border-muted pl-2">"{item.quote}"</p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-sm mt-4">{note.closing}</p>
+                    <p className="text-sm font-medium mt-2">{note.signoff}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+
+            {/* Closing */}
+            <Card className="border-rose-500/30">
+              <CardContent className="pt-6">
+                <div className="text-center space-y-4">
+                  <p className="text-sm italic">{thankYouNotes.closing}</p>
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        )}
+
         {/* Footer - Always visible */}
         <footer className="text-center py-12 opacity-50 italic">
           <p>Made with 🩵 and care by Zoda.</p>
@@ -1004,6 +1070,10 @@ export default function Wrapped2025() {
     </div>
   );
 }
+
+
+
+
 
 
 
