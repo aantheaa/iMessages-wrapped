@@ -123,7 +123,7 @@ export default function Wrapped2025() {
     // Personality cards
     { id: "personality", title: "Personality Evaluation", category: "personality" as const, storyContent: <StoryPersonality evaluation={personalityEvaluation} /> },
     // History cards
-    { id: "besties-through-years", title: "Besties Through The Years", category: "vibes" as const, storyContent: <StoryBestiesThroughYears data={yearlyTop5} /> },
+    { id: "besties-through-years", title: "BestiesThrough The Years", category: "vibes" as const, storyContent: <StoryBestiesThroughYears data={yearlyTop5} /> },
     { id: "history-highlights", title: "History Highlights", category: "vibes" as const, storyContent: <StoryHistoryHighlights highlights={[
       { emoji: "💜", title: "The Gabi Era (2021-2023)", text: "Your #1 for three consecutive years", color: "rgba(168,85,247,0.1)" },
       { emoji: "💕", title: "Rob's Rise", text: "Entered at #4 in 2022 → took the crown in 2024 → dominated 2025 with 7,158 messages", color: "rgba(236,72,153,0.1)" },
@@ -164,10 +164,10 @@ export default function Wrapped2025() {
 
         {/* View Mode Toggle + Share Button */}
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sticky top-2 z-50 py-2">
-          <div className="flex gap-1 p-1 rounded-full bg-muted/80 backdrop-blur-sm border shadow-lg">
+          <div className="flex flex-wrap sm:flex-nowrap justify-center gap-1 p-1 rounded-2xl sm:rounded-full bg-muted/80 backdrop-blur-sm border shadow-lg max-w-full">
             <button
               onClick={() => setViewMode("vibes")}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${
                 viewMode === "vibes" 
                   ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white shadow-md" 
                   : "text-muted-foreground hover:text-foreground"
@@ -177,7 +177,7 @@ export default function Wrapped2025() {
             </button>
             <button
               onClick={() => setViewMode("messages")}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${
                 viewMode === "messages" 
                   ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-md" 
                   : "text-muted-foreground hover:text-foreground"
@@ -187,7 +187,7 @@ export default function Wrapped2025() {
             </button>
             <button
               onClick={() => setViewMode("personality")}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${
                 viewMode === "personality" 
                   ? "bg-gradient-to-r from-violet-500 to-indigo-500 text-white shadow-md" 
                   : "text-muted-foreground hover:text-foreground"
@@ -197,7 +197,7 @@ export default function Wrapped2025() {
             </button>
             <button
               onClick={() => setViewMode("history")}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${
                 viewMode === "history" 
                   ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md" 
                   : "text-muted-foreground hover:text-foreground"
@@ -207,7 +207,7 @@ export default function Wrapped2025() {
             </button>
             <button
               onClick={() => setViewMode("growth")}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${
                 viewMode === "growth" 
                   ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md" 
                   : "text-muted-foreground hover:text-foreground"
@@ -217,13 +217,13 @@ export default function Wrapped2025() {
             </button>
             <button
               onClick={() => setViewMode("thankyou")}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${
                 viewMode === "thankyou" 
                   ? "bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-md" 
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              💌 Thank You
+              💌 Thanks
             </button>
           </div>
           <ShareModal cards={allCards} />
@@ -861,7 +861,7 @@ export default function Wrapped2025() {
             <Card>
               <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center">
                 <div>
-                  <CardTitle>📜 Your Besties Through The Years</CardTitle>
+                  <CardTitle>📜 Your BestiesThrough The Years</CardTitle>
                   <CardDescription>Top 5 people you texted most, year by year</CardDescription>
                 </div>
                 <div className="ml-auto">
@@ -921,7 +921,7 @@ export default function Wrapped2025() {
               title="History Highlights"
               storyContent={<StoryHistoryHighlights highlights={[
                 { emoji: "💜", title: "The Gabi Era (2021-2023)", text: "Your #1 for three consecutive years", color: "rgba(168,85,247,0.1)" },
-                { emoji: "💕", title: "Rob's Rise", text: "Entered at #4 in 2022 → took the crown in 2024 → dominated 2025 with 7,158 messages", color: "rgba(236,72,153,0.1)" },
+                { emoji: "💕", title: "Rob's Rise", text: "Entered at #4 in 2022 → took the crown in 2024 → absolutely dominated 2025 with 7,158 messages", color: "rgba(236,72,153,0.1)" },
                 { emoji: "✨", title: "Jackie's Arrival", text: "Burst onto the scene in 2024 at #2 and stayed there", color: "rgba(59,130,246,0.1)" },
                 { emoji: "🌟", title: "The Constants", text: "Melanie (4/5 years), Cloe (every year since 2022), Mom (3 years)", color: "rgba(245,158,11,0.1)" },
               ]} />}
@@ -1169,6 +1169,7 @@ export default function Wrapped2025() {
     </div>
   );
 }
+
 
 
 
