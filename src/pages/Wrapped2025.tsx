@@ -126,7 +126,7 @@ export default function Wrapped2025() {
     { id: "besties-through-years", title: "BestiesThrough The Years", category: "vibes" as const, storyContent: <StoryBestiesThroughYears data={yearlyTop5} /> },
     { id: "history-highlights", title: "History Highlights", category: "vibes" as const, storyContent: <StoryHistoryHighlights highlights={[
       { emoji: "💜", title: "The Gabi Era (2021-2023)", text: "Your #1 for three consecutive years", color: "rgba(168,85,247,0.1)" },
-      { emoji: "💕", title: "Rob's Rise", text: "Entered at #4 in 2022 → took the crown in 2024 → dominated 2025 with 7,158 messages", color: "rgba(236,72,153,0.1)" },
+      { emoji: "💕", title: "Rob's Rise", text: "Entered at #4 in 2022 → took the crown in 2024 → absolutely dominated 2025 with 7,158 messages", color: "rgba(236,72,153,0.1)" },
       { emoji: "✨", title: "Jackie's Arrival", text: "Burst onto the scene in 2024 at #2 and stayed there", color: "rgba(59,130,246,0.1)" },
       { emoji: "🌟", title: "The Constants", text: "Melanie (4/5 years), Cloe (every year since 2022), Mom (3 years)", color: "rgba(245,158,11,0.1)" },
     ]} /> },
@@ -163,7 +163,7 @@ export default function Wrapped2025() {
         </ExportableCard>
 
         {/* View Mode Toggle + Share Button */}
-        <div className="flex flex-col justify-center items-center gap-2 sticky top-2 z-50 py-2">
+        <div className="flex flex-col justify-center items-center gap-3 sticky top-2 z-50 py-2">
           <ShareModal cards={allCards} />
           
           <div className="flex flex-wrap sm:flex-nowrap justify-center gap-1 p-1 rounded-2xl sm:rounded-full bg-muted/80 backdrop-blur-sm border shadow-lg max-w-full">
@@ -1170,6 +1170,7 @@ export default function Wrapped2025() {
     </div>
   );
 }
+
 
 
 
