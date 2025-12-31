@@ -163,7 +163,9 @@ export default function Wrapped2025() {
         </ExportableCard>
 
         {/* View Mode Toggle + Share Button */}
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sticky top-2 z-50 py-2">
+        <div className="flex flex-col justify-center items-center gap-2 sticky top-2 z-50 py-2">
+          <ShareModal cards={allCards} />
+          
           <div className="flex flex-wrap sm:flex-nowrap justify-center gap-1 p-1 rounded-2xl sm:rounded-full bg-muted/80 backdrop-blur-sm border shadow-lg max-w-full">
             <button
               onClick={() => setViewMode("vibes")}
@@ -226,7 +228,6 @@ export default function Wrapped2025() {
               💌 Thanks
             </button>
           </div>
-          <ShareModal cards={allCards} />
         </div>
 
         {/* ===================== VIBES VIEW ===================== */}
@@ -1169,6 +1170,7 @@ export default function Wrapped2025() {
     </div>
   );
 }
+
 
 
 
